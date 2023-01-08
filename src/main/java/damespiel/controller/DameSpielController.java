@@ -25,6 +25,7 @@ public class DameSpielController implements IDameSpielController {
             dameView.drawTitleScreen();
         }else if (gameState == GameState.DAME_SCREEN) {
             // draw all dame pieces
+            dameView.drawGame();
 
         }
         else if (gameState == GameState.GAME_OVER) {
@@ -37,7 +38,7 @@ public class DameSpielController implements IDameSpielController {
     @Override
     public void userInput() {
         if (gameState == GameState.START_SCREEN) {
-        //    gameState = GameState.DAME_SCREEN;
+            //gameState = GameState.DAME_SCREEN;
             gameState = GameState.GAME_OVER;
         }
         else if (gameState == GameState.DAME_SCREEN) {
@@ -48,7 +49,7 @@ public class DameSpielController implements IDameSpielController {
     }
 
     public void restartGame() {
-         gameState = GameState.START_SCREEN;
+         gameState = GameState.DAME_SCREEN;
 
     }
     public void exitGame() {

@@ -4,7 +4,6 @@ import damespiel.controller.DameSpielController;
 import damespiel.controller.IDameSpielController;
 import damespiel.controller.IDameSpielView;
 import damespiel.model.DamePiece;
-import damespiel.model.PieceType;
 import processing.core.PApplet;
 import processing.core.PImage;
 
@@ -12,8 +11,9 @@ public class DameSpielView extends PApplet implements IDameSpielView {
 
     PImage startScreen;
     IDameSpielController dameSpielController;
+    boolean onPiece = false;
 
-    DamePiece[][] damePieces;
+    PImage[][]  gameBoard;
 
 
     public DameSpielView() {
@@ -41,6 +41,7 @@ public class DameSpielView extends PApplet implements IDameSpielView {
         if (key == 'q') {
             dameSpielController.exitGame();
         }
+
     }
 
 
@@ -49,19 +50,65 @@ public class DameSpielView extends PApplet implements IDameSpielView {
 
 
 
-    /**
-     * @param damePieces
-     */
     @Override
-    public void onStartPosition(DamePiece[][] damePieces) {
+    public void onStartBoard() {
+        background(0);
+
+        for (int i = 0; i < 8;i++) {
+            for (int j = 0; j < 8; j++) {
+                if((i+j)%2 == 0) {
+                    fill(255,206,158);
+                } else {
+                    fill(209,139,71);
+                }
+                rect(i*100 + 100,j*100 +40,100,100);
+
+
+
+
+
+/*
+
+                if (gameBoard[i][j] != null) {
+                    image(gameBoard[j][i], i*100, j*100, 100, 100);
+                }
+                if (onPiece){
+                    if validMove(a,b,c,d,damePieces){
+                        fill(255,0,0,100);
+                        rect(i*100,j*100,100,100);
+                    }
+                    if (j==a && j==b && damePieces[i][j] != null){
+                        fill(0,0,255,100);
+                        rect(i*100,j*100,100,100);
+                    }
+                    }
+
+
+
+ */
+
+
+                }
+        }
+
+        fill(255,206,158);
+        rect(65,850,875,120);
+
+        fill(0,0,0);
+        textSize(50);
+        text("Score !", 100, 920);
+
+
 
     }
+
 
     /**
      *
      */
     @Override
     public void drawGame() {
+        onStartBoard();
 
     }
 

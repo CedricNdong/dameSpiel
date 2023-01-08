@@ -18,5 +18,12 @@ public class DamePiece {
         this.pieceType = pieceType;
     }
 
+    public void movePiece( int xPosTo, int yPosTo) {
+        this.xPosFrom = xPosTo;
+        this.yPosFrom = yPosTo;
+    }
+
+
+
 
 }

@@ -1,5 +1,4 @@
-import damespiel.model.DameBoard;
-import damespiel.model.DameSpiel;
+import damespiel.model.DameSpielModell;
 
 public class Main {
 
@@ -7,7 +6,7 @@ public class Main {
         System.out.println("Hello world! and welcome to the dame game");
         System.out.println("");
 
-        DameSpiel dameSpiel = new DameSpiel();
+        DameSpielModell dameSpiel = new DameSpielModell();
 
         dameSpiel.startGame();
 

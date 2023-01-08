@@ -17,17 +17,6 @@ public class DamePiece {
         this.yPosFrom = yPosFrom;
         this.pieceType = pieceType;
     }
-    public void moveTo(int xPosTo, int yPosTo) {
-
-        System.out.println(" i am movinng ");
-
-    };
-
-
-
-
-
-
 
 
 }

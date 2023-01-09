@@ -17,7 +17,9 @@ public class DamePlayer {
     }
 
     // should be a type of  Move
-    public void playerPlay() {
+    public PieceType onPlayer() {
         System.out.println("Player 1 is playing");
+        return this.playerPieceType;
     }
+
 }

@@ -6,9 +6,12 @@ public class Main {
         System.out.println("Hello world! and welcome to the dame game");
         System.out.println("");
 
-        Dame dameSpiel = new Dame();
+        Dame dame = new Dame();
 
-        dameSpiel.startGame();
+        System.out.println(dame);
+
+
+        System.out.println("goodbye world! see you next time");
 
 
 

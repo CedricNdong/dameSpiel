@@ -1,17 +1,18 @@
 package damespiel.controller;
 
+import damespiel.model.Dame;
 import damespiel.view.DameSpielView;
+import lombok.Data;
 
 
-
-
+@Data
 public class DameSpielController implements IDameSpielController {
 
-
+    private Dame dame;
     private IDameSpielView dameView;
     private GameState gameState;
     public DameSpielController(DameSpielView dameSpielView, int width, int height) {
-
+       // this.dame = new Dame(width, height);
         this.dameView = dameSpielView;
         this.gameState = GameState.START_SCREEN;
     }

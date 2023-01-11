@@ -33,10 +33,7 @@ public class Dame {
     }
 
     public void gameInitBoard() {
-
-        System.out.print("           +---+---+---+---+---+---+---+---+\n");
         for (int i = 0; i < BOARD_ROWS; i++) {
-            System.out.print("  " + i + "        | ");
             for (int j = 0; j < BOARD_COLUMNS; j++) {
                 PieceType pieceType;
                 if (i < 3 && (i + j) % 2 == 1) {
@@ -44,45 +41,91 @@ public class Dame {
                     cell = new Cell(i, j);
                     cell.setDamePiece(new DamePiece(i, j, pieceType));
                     board[i][j] = cell;
-                    System.out.print(""+ board[i][j]+" | ");
-
                 } else if (i > 4 && (i + j) % 2 == 1) {
                     pieceType = PieceType.WHITE_PIECE;
                     cell = new Cell(i, j);
                     cell.setDamePiece(new DamePiece(i, j, pieceType));
                     board[i][j] = cell;
                     cell = new Cell(i, j);
-                  System.out.print(""+ board[i][j]+" | ");
                 } else {
                     cell = new Cell(i, j);
-                    System.out.print("  | ");
+                    pieceType = PieceType.EMPTY;
+                    cell.setDamePiece(new DamePiece(i, j, pieceType));
+                    board[i][j] = cell;
                 }
             }
-            System.out.println();
-            System.out.print("           +---+---+---+---+---+---+---+---+\n");
         }
+        printBoard();
     }
 
-    public void makeMove(Move move) {
-
-
-    }
 
     public void undoMove(Move move) {
 
     }
 
-    // je doit avoir 4 parametre From et To
-    public Cell[][] updateBoard() {
-        board[4][1]= this.board[5][0];
+    public void printBoard( ) {
 
-        System.out.println("board[4][1] = " + board[4][1]);
-        return board;
+        System.out.print("           +---+---+---+---+---+---+---+---+\n");
+        for (int i = 0; i < BOARD_ROWS; i++) {
+            System.out.print("  " + i + "        | ");
+            for (int j = 0; j < BOARD_COLUMNS; j++) {
+                    System.out.print(""+ this.board[i][j]+" | ");
+                }
+            System.out.println();
+            System.out.print("           +---+---+---+---+---+---+---+---+\n");
+        }
+
+
+
+    }
+    // je doit avoir 4 parametre From et To
+    public void makeMove(int xFrom, int yFrom, int xTo, int yTo) {
+
+        // move the piece
+
+
+        // check if the move is valid
+
+        //the move is valid
+        if (this.board[xTo][yTo].isCellEmpty()) {
+            // update the board
+            this.board[xTo][yTo].setDamePiece(this.board[xFrom][yFrom].getDamePiece());
+            this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
+
+        }else { // the move is not valid
+            if (this.board[xTo][yTo].getDamePiece().getPieceType() == PieceType.BLACK_PIECE) {//if the piece is enemy
+                // check if you can jump over the piece
+                if (this.board[xTo-1][yTo-1].getDamePiece().getPieceType() == PieceType.EMPTY
+                    || this.board[xTo-1][yTo+1].getDamePiece().getPieceType() == PieceType.EMPTY) {
+                    // eat the piece
+                    this.board[xTo-1][yTo-1].setDamePiece(this.board[xFrom][yFrom].getDamePiece());
+                    this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
+                    this.damePlayers[0].addScore();
+                }else {
+                    System.out.println("You can't move there");
+                }
+
+
+            } else {// if the piece is not enemy
+                System.out.println("choose another piece");
+            }
+        }
+
+
+
+
+      //  this.board[xTo][yTo].setDamePiece(this.board[xFrom][yFrom].getDamePiece());
+      //  this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
+        printBoard();
+
+
+
     }
 
-
-
-
+    // check if cell is empty
+    public boolean isEmpty(int x, int y) {
+        return this.board[x][y].getDamePiece().getPieceType() == PieceType.EMPTY;
+    }
 
 }
 

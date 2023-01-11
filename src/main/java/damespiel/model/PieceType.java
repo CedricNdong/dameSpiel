@@ -14,7 +14,7 @@ public enum PieceType {
     BLACK_PIECE,
     WHITE_PIECE,
     BLACK_QUEEN,
-    WHITE_QUEEN
+    EMPTY, WHITE_QUEEN
 
 
 

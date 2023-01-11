@@ -34,10 +34,15 @@ public class DamePiece {
             return "O";
         } else if (pieceType == PieceType.BLACK_PIECE) {
             return "X";
-        } else {
+        } else if (pieceType == PieceType.WHITE_QUEEN) {
+            return "W";
+        } else if (pieceType == PieceType.BLACK_QUEEN) {
+            return "Q";
+        }else {
             return " ";
         }
     }
+
 
 
 

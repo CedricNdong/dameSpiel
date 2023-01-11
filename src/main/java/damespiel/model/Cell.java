@@ -15,12 +15,25 @@ public class Cell {
 
 
     public String toString() {
-        return damePiece.toString();
+        if (damePiece != null) {
+            return damePiece.toString();
+        } else if (damePiece == null) {
+
+            return " ";
+        }
+        return " ";
+
     }
 
 
     public boolean isCellEmpty() {
-        return damePiece == null;
+        if (damePiece.getPieceType() == PieceType.EMPTY) {
+
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 

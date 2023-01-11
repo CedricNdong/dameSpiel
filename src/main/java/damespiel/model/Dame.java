@@ -9,12 +9,12 @@ public class Dame {
     private Cell[][] board;
     private DamePlayer[] damePlayers;
     private DamePlayer currentPlayer;
-    private Cell damePiece;
+    private Cell cell;
 
     public Dame() {
         this.board = new Cell[BOARD_ROWS][BOARD_COLUMNS];
         this.damePlayers = new DamePlayer[2];
-       // this.damePlayers[0] = new DamePlayer(PieceType.WHITE.getPieceType().getPieceColor());
+        // this.damePlayers[0] = new DamePlayer(PieceType.WHITE.getPieceType().getPieceColor());
         // this.damePlayers[1] = new DamePlayer(PieceType.BLACK);
         this.currentPlayer = damePlayers[0];
         this.gameInitBoard();
@@ -23,6 +23,7 @@ public class Dame {
 
     // play the game
     public boolean isGameOver = true;
+
     public void play() {
         while (!isGameOver) {
             //play the game here
@@ -31,31 +32,30 @@ public class Dame {
         // print the winner
     }
 
-    public  void gameInitBoard() {
+    public void gameInitBoard() {
 
         System.out.print("           +---+---+---+---+---+---+---+---+\n");
         for (int i = 0; i < BOARD_ROWS; i++) {
-            System.out.print("  "+i+ "        | ");
+            System.out.print("  " + i + "        | ");
             for (int j = 0; j < BOARD_COLUMNS; j++) {
-
+                PieceType pieceType;
                 if (i < 3 && (i + j) % 2 == 1) {
-                    damePiece = new Cell(i, j);
-                    board[i][j] = damePiece;
-
-                    System.out.print("X | ");
-                } else if (i > 4 && (i + j) % 2 == 1) {
-                    /* damePiece = new DamePiece(i, j, PieceType.BLACK_PIECE);
-                    board[i][j] = damePiece.getPieceType().getPieceColor();
+                    pieceType = PieceType.BLACK_PIECE;
+                    cell = new Cell(i, j);
+                    cell.setDamePiece(new DamePiece(i, j, pieceType));
+                    board[i][j] = cell;
                     System.out.print(""+ board[i][j]+" | ");
-                     */
-                    damePiece = new Cell(i, j);
-                    board[i][j] = damePiece;
-                    System.out.print("O | ");
-                } else {
-                    damePiece = new Cell(i, j);
-                    damePiece.isCellEmpty();
-                    System.out.print("  | ");
 
+                } else if (i > 4 && (i + j) % 2 == 1) {
+                    pieceType = PieceType.WHITE_PIECE;
+                    cell = new Cell(i, j);
+                    cell.setDamePiece(new DamePiece(i, j, pieceType));
+                    board[i][j] = cell;
+                    cell = new Cell(i, j);
+                  System.out.print(""+ board[i][j]+" | ");
+                } else {
+                    cell = new Cell(i, j);
+                    System.out.print("  | ");
                 }
             }
             System.out.println();
@@ -65,9 +65,19 @@ public class Dame {
 
     public void makeMove(Move move) {
 
+
     }
+
     public void undoMove(Move move) {
 
+    }
+
+    // je doit avoir 4 parametre From et To
+    public Cell[][] updateBoard() {
+        board[4][1]= this.board[5][0];
+
+        System.out.println("board[4][1] = " + board[4][1]);
+        return board;
     }
 
 

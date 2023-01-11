@@ -23,6 +23,22 @@ public class DamePiece {
         this.yPosFrom = yPosTo;
     }
 
+    public boolean isValideMove() {
+        movePiece(this.xPosFrom, this.yPosFrom);
+
+        return true;
+    }
+    public String toString() {
+
+        if (pieceType == PieceType.WHITE_PIECE) {
+            return "O";
+        } else if (pieceType == PieceType.BLACK_PIECE) {
+            return "X";
+        } else {
+            return " ";
+        }
+    }
+
 
 
 

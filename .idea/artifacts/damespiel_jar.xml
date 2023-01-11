@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="damespiel:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/damespiel_jar</output-path>
+    <root id="root">
+      <element id="archive" name="damespiel.jar">
+        <element id="module-output" name="damespiel" />
+      </element>
+      <element id="library" level="project" name="core" />
+      <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.18.24" />
+    </root>
+  </artifact>
+</component>

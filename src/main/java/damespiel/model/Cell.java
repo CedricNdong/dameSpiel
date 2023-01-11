@@ -14,6 +14,11 @@ public class Cell {
     }
 
 
+    public String toString() {
+        return damePiece.toString();
+    }
+
+
     public boolean isCellEmpty() {
         return damePiece == null;
     }

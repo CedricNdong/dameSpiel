@@ -37,7 +37,7 @@ public class DamePiece {
         } else if (pieceType == PieceType.WHITE_QUEEN) {
             return "W";
         } else if (pieceType == PieceType.BLACK_QUEEN) {
-            return "Q";
+            return "B";
         }else {
             return " ";
         }

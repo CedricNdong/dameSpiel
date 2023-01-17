@@ -10,6 +10,7 @@ public class Dame {
     private DamePlayer[] damePlayers;
     private DamePlayer currentPlayer;
     private Cell cell;
+    private boolean isGameOver;
 
     public Dame() {
         this.board = new Cell[BOARD_ROWS][BOARD_COLUMNS];
@@ -18,20 +19,8 @@ public class Dame {
          this.damePlayers[1] = new DamePlayer(PieceType.BLACK_PIECE);
         this.currentPlayer = this.damePlayers[0];
         this.gameInitBoard();
+        this.isGameOver = false;
     }
-
-
-    // play the game
-    public boolean isGameOver = true;
-
-    public void play() {
-        while (!isGameOver) {
-            //play the game here
-        }
-
-        // print the winner
-    }
-
     public void gameInitBoard() {
         for (int i = 0; i < BOARD_ROWS; i++) {
             for (int j = 0; j < BOARD_COLUMNS; j++) {
@@ -74,9 +63,20 @@ public class Dame {
 
 
     }
+    // method to check if the game is over
+    public boolean isGameOver() {
+        if (this.currentPlayer.getScore() == 12) {
+            System.out.println("  The Winner is   "+this.currentPlayer.getPlayerPieceType());
+           return this.isGameOver = true;
+        }
+        return this.isGameOver;
+    }
+
 
     public void makeMove(int xFrom, int yFrom, int xTo, int yTo) {
 
+
+        isGameOver();
         if (playerTurn(xFrom,yFrom)) {
             // check the vertical and horizontal move
             if (isMoveVerticalOrHorizontal(xFrom, yFrom, xTo, yTo)) {
@@ -112,7 +112,7 @@ public class Dame {
                                 this.board[xTo][yTo].setDamePiece(new DamePiece(xTo, yTo, PieceType.EMPTY));
                                 this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
 
-                                this.currentPlayer.setScore(this.currentPlayer.getScore() + 1);
+                                this.currentPlayer.setScore(this.currentPlayer.getScore() + 12);
                                 System.out.println("Player  score is " + this.currentPlayer.getScore());
                                 changePlayer();
                                 setPieceToQueen(xTo - 1, yTo - 1);
@@ -121,7 +121,7 @@ public class Dame {
                                 this.board[xTo][yTo].setDamePiece(new DamePiece(xTo, yTo, PieceType.EMPTY));
                                 this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
 
-                                this.currentPlayer.setScore(this.currentPlayer.getScore() + 1);
+                                this.currentPlayer.setScore(this.currentPlayer.getScore() + 12);
                                 System.out.println("Player 1 score is " + this.currentPlayer.getScore());
                                 changePlayer();
                                 setPieceToQueen(xTo - 1, yTo + 1);
@@ -172,8 +172,8 @@ public class Dame {
         }else {
             System.out.println("It's not your turn");
         }
-
         printBoard();
+        isGameOver();
     }
 
 

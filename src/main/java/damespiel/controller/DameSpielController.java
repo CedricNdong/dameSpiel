@@ -12,6 +12,7 @@ public class DameSpielController implements IDameSpielController {
     private Dame dame;
     private IDameSpielView dameView;
     private GameState gameState;
+    private boolean isEvent = true;
     public DameSpielController(DameSpielView dameSpielView) {
         this.dame = new Dame();
         this.dameView = dameSpielView;
@@ -23,51 +24,61 @@ public class DameSpielController implements IDameSpielController {
      */
     @Override
     public void nextFrame() {
-        if (gameState == GameState.START_SCREEN) {
-            dameView.drawTitleScreen();
-        }else if (gameState == GameState.DAME_SCREEN) {
+        if (isEvent) {
 
-            dameView.drawGame();
-
-            // draw all dame pieces
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    if (dame.getBoard()[j][i] != null && dame.getBoard()[i][j].getDamePiece().getPieceType() == PieceType.WHITE_PIECE) {
-
-                       dameView.drawWhitePiece(dame.getBoard()[j][i].getDamePiece().getXPosFrom()*100 +100 , dame.getBoard()[j][i].getDamePiece().getYPosFrom()*100 +40);
-                    }else if (dame.getBoard()[j][i] != null && dame.getBoard()[i][j].getDamePiece().getPieceType() == PieceType.BLACK_PIECE) {
-                        dameView.drawBlackPiece(dame.getBoard()[j][i].getDamePiece().getXPosFrom()*100 +100, dame.getBoard()[j][i].getDamePiece().getYPosFrom()*100 +40);
-                    }
-                    else if (dame.getBoard()[j][i] != null && dame.getBoard()[i][j].getDamePiece().getPieceType() == PieceType.BLACK_QUEEN) {
-                       dameView.drawBlackQueen(dame.getBoard()[j][i].getDamePiece().getXPosFrom()*100 +100, dame.getBoard()[j][i].getDamePiece().getYPosFrom()*100 +40);
-                    }
-                    else if (dame.getBoard()[j][i] != null && dame.getBoard()[i][j].getDamePiece().getPieceType() == PieceType.WHITE_QUEEN) {
-                        dameView.drawWhiteQueen(dame.getBoard()[j][i].getDamePiece().getXPosFrom()*100 +100, dame.getBoard()[j][i].getDamePiece().getYPosFrom()*100 +40);
-                    }else {
-                        dameView.drawEmptyCell(dame.getBoard()[i][j].getDamePiece().getXPosFrom()*i*100, dame.getBoard()[i][j].getDamePiece().getYPosFrom()*j*100);
-                    }
+            switch (gameState) {
+                case START_SCREEN -> {
+                    dameView.drawTitleScreen();
+                    isEvent= false;
+                }
+                case DAME_SCREEN -> {
+                    dameView.drawGame();
+                    isEvent = false;
+                }
+                case GAME_OVER -> {
+                    dameView.drawGameOver();
                 }
             }
-
         }
-        else if (gameState == GameState.GAME_OVER) {
-            dameView.drawGameOver();
-        }
-
     }
 
 
     @Override
-    public void userInput(int xPosFrom, int yPosFrom) {
+    public void userInput() {
         if (gameState == GameState.START_SCREEN) {
+            isEvent = true;
             gameState = GameState.DAME_SCREEN;
+
         }
         else if (gameState == GameState.DAME_SCREEN) {
 
-            // move dame piece
-            dame.makeMove( xPosFrom,yPosFrom, int xPosTo, int yPosTo);
+            // mouss X Y  und
+
+
 
         }
+
+    }
+    public void mousePos(int xPos, int yPos) {
+        // check if the board  at the position not null
+
+
+            if (dame.getBoard()[xPos][yPos] != null) {
+              dame.possibleMove(xPos, yPos);
+
+                // dameView.drawCanMoveTo(dame.getTo1().get(0), dame.getTo1().get(1));
+
+
+                 dameView.drawCanMoveTo(dame.getTo2().get(0), dame.getTo2().get(1));
+
+            System.out.println("value is null");
+
+        }
+            else {
+                dameView.drawGame();
+            }
+
+
 
     }
 

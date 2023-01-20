@@ -2,7 +2,9 @@ package damespiel.model;
 
 import lombok.Data;
 
+
 @Data
+
 public class DamePlayer {
     private int score;
     private PieceType playerPieceType;
@@ -16,10 +18,5 @@ public class DamePlayer {
         this.score++;
     }
 
-    // should be a type of  Move
-    public PieceType onPlayer() {
-        System.out.println("Player 1 ist playing");
-        return this.playerPieceType;
-    }
 
 }

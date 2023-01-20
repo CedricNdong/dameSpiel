@@ -21,11 +21,21 @@ public class Main {
             x  = scanner.nextInt();
             System.out.println("y please");
             y  = scanner.nextInt();
+            /*
             System.out.println("x2 please");
             x2 = scanner.nextInt();
             System.out.println("y2 please");
             y2 = scanner.nextInt();
-                dame.makeMove(x, y, x2, y2);
+                //dame.makeMove(x, y, x2, y2);
+
+             */
+            dame.possibleMove(x,y);
+            //give the possible position of the
+            System.out.println("possible move to "+dame.getTo1().get(0)+" "+dame.getTo1().get(1));
+            System.out.println("possible move to "+dame.getTo2().get(0)+" "+dame.getTo2().get(1));
+
+
+
 
         }
     }

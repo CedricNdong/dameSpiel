@@ -3,7 +3,9 @@ package damespiel.model;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 @Data
 public class Dame {
@@ -13,6 +15,8 @@ public class Dame {
     private DamePlayer currentPlayer;
     private Cell cell;
     private   ArrayList<Integer>  to1,to2; // the arraylist to store the possible moves
+    private List<Cell[][]> previousState;
+    private Stack<Cell[][]> undoStack;
     private boolean isGameOver;
 
     public Dame() {
@@ -21,6 +25,10 @@ public class Dame {
         this.currentPlayer = this.damePlayers[0];
         this.gameInitBoard();
         this.isGameOver = false;
+        this.previousState = new ArrayList<>();
+        this.previousState.add(this.board);
+        undoStack = new Stack<>();
+
     }
     public void gameInitBoard() {
         for (int i = 0; i < BOARD_ROWS; i++) {
@@ -45,7 +53,9 @@ public class Dame {
                 }
             }
         }
+
         printBoard();
+
     }
 
     public void printBoard( ) {
@@ -59,6 +69,7 @@ public class Dame {
             System.out.println();
             System.out.print("           +-----+-----+-----+-----+-----+-----+-----+-----+\n");
         }
+
     }
     // method to check if the game is over
     public boolean isGameOver() {
@@ -206,6 +217,7 @@ public class Dame {
         return listOfMoves;
     }
 
+
     // create a method isQueenMove to check if the move is a queen move
     public boolean isQueenMove(int xFrom, int yFrom, int xTo, int yTo) {
         if (Math.abs(xFrom - xTo) == Math.abs(yFrom - yTo)) {
@@ -226,7 +238,9 @@ public class Dame {
     }
 
     // method to move a piece
-    public void movePiece(int xFrom, int yFrom, int xTo, int yTo) {
+    public void makeMove(int xFrom, int yFrom, int xTo, int yTo) {
+        undoStack.push(copyBoard());
+
         // check invalid move
         if (!isValidMove(xFrom, yFrom, xTo, yTo)) {
             printBoard();
@@ -249,6 +263,8 @@ public class Dame {
             this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom,yFrom, PieceType.EMPTY));
             this.board[xMiddle][yMiddle].setDamePiece(new DamePiece(xMiddle, yMiddle, PieceType.EMPTY));
             this.currentPlayer.setScore(this.currentPlayer.getScore() + 1);
+         //   this.previousState.add(this.board);
+            System.out.println("You captured a piece");
             setPieceToQueen(xTo, yTo);
         }
 
@@ -271,7 +287,10 @@ public class Dame {
             }
             this.board[xTo][yTo].setDamePiece(new DamePiece(xFrom,yFrom, this.board[xFrom][yFrom].getDamePiece().getPieceType()));
             this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
+
             setPieceToQueen(xTo, yTo);
+
+
         }
 
 
@@ -279,7 +298,7 @@ public class Dame {
         //this.board[xTo][yTo].setDamePiece(new DamePiece(xTo, yTo, this.board[xFrom][yFrom].getDamePiece().getPieceType()));
         //this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
 
-
+       // this.previousState.add(this.board);
         changePlayer();
 
         printBoard();
@@ -287,34 +306,53 @@ public class Dame {
 
 
 
-
-
-
-
-
-
-
     public void undoMove(int xFrom, int yFrom, int xTo, int yTo) {
 
-    // check if the undo is valid
+
+        /*
+
+        if (this.previousState.size() > 0) {
+            System.out.println("Undoing move");
+
+            this.board = this.previousState.remove(this.previousState.size() - 1);
+            System.out.println(Arrays.deepToString(this.board));
 
 
 
-    // the cell to undo is empty
+
+            System.out.println("game move in the previous state is: " + this.previousState.size());
+            changePlayer();
+        } else {
+            System.out.println("No more moves to undo");
+        }
 
 
+         */
 
-    // the cell to undo is not empty
+        if (!this.undoStack.isEmpty()) {
+                    System.out.println("Undoing move...");
+                    board = undoStack.pop();
+                    //System.out.println(Arrays.deepToString(this.board));
+                  //  System.out.println("game move in the previous state is: " + this.previousState.size());
+
+                    changePlayer();
+                } else {
+                    System.out.println("No more moves to undo");
+                }
 
 
+        printBoard();
+    }
 
-
-    // undo the move
-    this.board[xFrom][yFrom].setDamePiece(this.board[xTo][yTo].getDamePiece());
-    this.board[xTo][yTo].setDamePiece(new DamePiece(xTo, yTo, PieceType.EMPTY));
-
-    printBoard();
-}
+    private Cell[][] copyBoard() {
+        Cell[][] copy = new Cell[BOARD_ROWS][BOARD_COLUMNS];
+        for (int i = 0; i < BOARD_ROWS; i++) {
+            for (int j = 0; j < BOARD_COLUMNS; j++) {
+                copy[i][j] = this.board[i][j];
+            }
+        }
+        return copy;
+    }
 
 
 }

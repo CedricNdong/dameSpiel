@@ -1,12 +1,12 @@
 import damespiel.model.Dame;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        int x,y, x2, y2;
+        int x,y, x2, y2,isUndo;
+
         System.out.println("Hello world! and welcome to the dame game");
         System.out.println("WHITE_PIECE = O  , BLACK_PIECE = X BLACK_QUEEN = Q and WHITE_QUEEN = W");
         System.out.println("");
@@ -27,6 +27,8 @@ public class Main {
             x2 = scanner.nextInt();
             System.out.println("y2 please");
             y2 = scanner.nextInt();
+
+
                 //dame.makeMove(x, y, x2, y2);
 
 
@@ -39,7 +41,15 @@ public class Main {
             //for (int[] move : moves) {
              //   System.out.println("possible move to "+move[0]+" "+move[1]);
             //}
-            dame.movePiece(x,y,x2,y2);
+            dame.makeMove(x,y,x2,y2);
+            System.out.println("undo? 10 for yes 0 for no");
+            isUndo = scanner.nextInt();
+            //undo
+            if (isUndo == 10) {
+                dame.undoMove(x,y,x2,y2);
+            }
+
+
 
 
 

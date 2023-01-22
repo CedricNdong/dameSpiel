@@ -64,7 +64,7 @@ public class DameSpielController implements IDameSpielController {
 
 
             if (dame.getBoard()[xPos][yPos] != null) {
-              dame.possibleMove(xPos, yPos);
+           //   dame.possibleMove(xPos, yPos);
 
                 // dameView.drawCanMoveTo(dame.getTo1().get(0), dame.getTo1().get(1));
 

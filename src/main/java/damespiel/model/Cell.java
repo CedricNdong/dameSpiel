@@ -26,13 +26,7 @@ public class Cell {
     }
 
 
-    public boolean isCellEmpty() {
-        if (damePiece.getPieceType() == PieceType.EMPTY) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 
 
 

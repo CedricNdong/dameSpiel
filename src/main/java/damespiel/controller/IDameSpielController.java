@@ -12,5 +12,6 @@ public interface IDameSpielController {
     public void exitGame();
 
 
-   public  void mousePos(int mouseX, int mouseY);
+   public  void mousePosFrom(int mouseX, int mouseY);
+   public  void mousePosTo(int mouseX,int mouseY,int mouseX1, int mouseY1);
 }

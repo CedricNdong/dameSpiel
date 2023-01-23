@@ -5,6 +5,8 @@ import damespiel.model.PieceType;
 import damespiel.view.DameSpielView;
 import lombok.Data;
 
+import java.util.List;
+
 
 @Data
 public class DameSpielController implements IDameSpielController {
@@ -32,7 +34,9 @@ public class DameSpielController implements IDameSpielController {
                     isEvent= false;
                 }
                 case DAME_SCREEN -> {
-                    dameView.drawGame();
+                    int whiteScore = dame.getDamePlayers()[0].getScore();
+                    int blackScore = dame.getDamePlayers()[1].getScore();
+                    dameView.drawGame(whiteScore, blackScore);
                     isEvent = false;
                 }
                 case GAME_OVER -> {
@@ -59,28 +63,42 @@ public class DameSpielController implements IDameSpielController {
         }
 
     }
-    public void mousePos(int xPos, int yPos) {
+    public void mousePosFrom(int xPos, int yPos) {
+        // check if the board  at the position not null
+
+            if (dame.getBoard()[xPos][yPos] != null) {
+
+                List<int[]> moveTo = dame.possibleMoves(xPos, yPos);
+                for (int[] ints : moveTo) {
+                    dameView.drawCanMoveTo(ints[0], ints[1]);
+                }
+
+               // dameView.drawCanMoveTo(xPos, yPos);
+
+            } else {
+                System.out.println("value is null");
+                dameView.drawGame(dame.getDamePlayers()[0].getScore(), dame.getDamePlayers()[1].getScore());
+            }
+
+    }
+
+    public void mousePosTo(int xPos, int yPos,int xPosTo,int yPosTo) {
         // check if the board  at the position not null
 
 
-            if (dame.getBoard()[xPos][yPos] != null) {
-           //   dame.possibleMove(xPos, yPos);
-
-                // dameView.drawCanMoveTo(dame.getTo1().get(0), dame.getTo1().get(1));
+        if (dame.getBoard()[xPos][yPos] != null && dame.getBoard()[xPosTo][yPosTo] != null) {
 
 
-                 dameView.drawCanMoveTo(dame.getTo2().get(0), dame.getTo2().get(1));
+            dame.makeMove(xPos, yPos, xPosTo, yPosTo);
+            dameView.drawMakeMove(dame.getBoard(),xPosTo, yPosTo,dame.getDamePlayers()[0].getScore(), dame.getDamePlayers()[1].getScore());
 
-            System.out.println("value is null");
-
+        } else {
+            System.out.println("select a possible move position");
+            dameView.drawGame(dame.getDamePlayers()[0].getScore(), dame.getDamePlayers()[1].getScore());
         }
-            else {
-                dameView.drawGame();
-            }
-
-
 
     }
+
 
     public void restartGame() {
          gameState = GameState.DAME_SCREEN;

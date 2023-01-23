@@ -29,25 +29,20 @@ public class Main {
             y2 = scanner.nextInt();
 
 
-                //dame.makeMove(x, y, x2, y2);
+            //dame.makeMove(x, y, x2, y2);
 
 
             //dame.possibleMoves(x,y);
             //give the possible position of the
-           // System.out.println("possible move to "+dame.getTo1().get(0)+" "+dame.getTo1().get(1));
+            // System.out.println("possible move to "+dame.getTo1().get(0)+" "+dame.getTo1().get(1));
             //System.out.println("possible move to "+dame.getTo2().get(0)+" "+dame.getTo2().get(1));
-          //  dame.possibleMoves(x,y);
+            //  dame.possibleMoves(x,y);
             //List<int[]>moves = dame.possibleMoves(x,y);
             //for (int[] move : moves) {
-             //   System.out.println("possible move to "+move[0]+" "+move[1]);
+            //   System.out.println("possible move to "+move[0]+" "+move[1]);
             //}
             dame.makeMove(x,y,x2,y2);
-            System.out.println("undo? 10 for yes 0 for no");
-            isUndo = scanner.nextInt();
-            //undo
-            if (isUndo == 10) {
-                dame.undoMove(x,y,x2,y2);
-            }
+
 
 
 

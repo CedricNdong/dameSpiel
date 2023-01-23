@@ -14,21 +14,15 @@ public class Dame {
     private DamePlayer[] damePlayers;
     private DamePlayer currentPlayer;
     private Cell cell;
-    private   ArrayList<Integer>  to1,to2; // the arraylist to store the possible moves
-    private List<Cell[][]> previousState;
-    private Stack<Cell[][]> undoStack;
     private boolean isGameOver;
 
     public Dame() {
         this.board = new Cell[BOARD_ROWS][BOARD_COLUMNS];
-        this.damePlayers = new DamePlayer[]{new DamePlayer(PieceType.WHITE_PIECE),new DamePlayer(PieceType.BLACK_PIECE)};
+        this.damePlayers = new DamePlayer[]{new DamePlayer(PieceType.WHITE_PIECE) ,new DamePlayer(PieceType.BLACK_PIECE),
+                new DamePlayer(PieceType.WHITE_QUEEN), new DamePlayer(PieceType.BLACK_QUEEN)};
         this.currentPlayer = this.damePlayers[0];
         this.gameInitBoard();
         this.isGameOver = false;
-        this.previousState = new ArrayList<>();
-        this.previousState.add(this.board);
-        undoStack = new Stack<>();
-
     }
     public void gameInitBoard() {
         for (int i = 0; i < BOARD_ROWS; i++) {
@@ -80,16 +74,7 @@ public class Dame {
         return this.isGameOver;
     }
 
-
-
-
-
-
-
     // method of possible moves
-
-
-
     // player turn method to  give the player who is playing and disable the other player
 
     public boolean playerTurn(int xFrom, int yFrom) {
@@ -239,7 +224,12 @@ public class Dame {
 
     // method to move a piece
     public void makeMove(int xFrom, int yFrom, int xTo, int yTo) {
-        undoStack.push(copyBoard());
+
+        // check if the selected piece is for the current player
+        if (this.board[xFrom][yFrom].getDamePiece().getPieceType() != this.currentPlayer.getPlayerPieceType()) {
+            System.out.println("It's not your turn. " + this.currentPlayer.getPlayerPieceType() + " should first play");
+            return;
+        }
 
         // check invalid move
         if (!isValidMove(xFrom, yFrom, xTo, yTo)) {
@@ -251,7 +241,7 @@ public class Dame {
             if (!this.isQueenMove(xFrom, yFrom, xTo, yTo)) {
                 System.out.println("You can not move a queen like that");
                 printBoard();
-               // return;
+
             }
         }
 
@@ -263,12 +253,10 @@ public class Dame {
             this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom,yFrom, PieceType.EMPTY));
             this.board[xMiddle][yMiddle].setDamePiece(new DamePiece(xMiddle, yMiddle, PieceType.EMPTY));
             this.currentPlayer.setScore(this.currentPlayer.getScore() + 1);
-         //   this.previousState.add(this.board);
             System.out.println("You captured a piece");
             setPieceToQueen(xTo, yTo);
         }
 
-        // it is move of a normal piece that can only move one cell and ahead
 
         if (Math.abs(xFrom - xTo) == 1) {
             if (this.currentPlayer.getPlayerPieceType() == PieceType.WHITE_PIECE) {
@@ -289,71 +277,17 @@ public class Dame {
             this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
 
             setPieceToQueen(xTo, yTo);
-
-
         }
+        // check for promotion
 
 
 
-        //this.board[xTo][yTo].setDamePiece(new DamePiece(xTo, yTo, this.board[xFrom][yFrom].getDamePiece().getPieceType()));
-        //this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
 
-       // this.previousState.add(this.board);
+
         changePlayer();
 
         printBoard();
     }
-
-
-
-    public void undoMove(int xFrom, int yFrom, int xTo, int yTo) {
-
-
-        /*
-
-        if (this.previousState.size() > 0) {
-            System.out.println("Undoing move");
-
-            this.board = this.previousState.remove(this.previousState.size() - 1);
-            System.out.println(Arrays.deepToString(this.board));
-
-
-
-
-            System.out.println("game move in the previous state is: " + this.previousState.size());
-            changePlayer();
-        } else {
-            System.out.println("No more moves to undo");
-        }
-
-
-         */
-
-        if (!this.undoStack.isEmpty()) {
-                    System.out.println("Undoing move...");
-                    board = undoStack.pop();
-                    //System.out.println(Arrays.deepToString(this.board));
-                  //  System.out.println("game move in the previous state is: " + this.previousState.size());
-
-                    changePlayer();
-                } else {
-                    System.out.println("No more moves to undo");
-                }
-
-
-        printBoard();
-    }
-
-    private Cell[][] copyBoard() {
-        Cell[][] copy = new Cell[BOARD_ROWS][BOARD_COLUMNS];
-        for (int i = 0; i < BOARD_ROWS; i++) {
-            for (int j = 0; j < BOARD_COLUMNS; j++) {
-                copy[i][j] = this.board[i][j];
-            }
-        }
-        return copy;
-    }
-
 
 }
 

@@ -17,8 +17,7 @@ public class Dame {
 
     public Dame() {
         this.board = new Cell[BOARD_ROWS][BOARD_COLUMNS];
-        this.damePlayers = new DamePlayer[]{new DamePlayer(PieceType.WHITE_PIECE) ,new DamePlayer(PieceType.BLACK_PIECE),
-                new DamePlayer(PieceType.WHITE_QUEEN), new DamePlayer(PieceType.BLACK_QUEEN)};
+        this.damePlayers = new DamePlayer[]{new DamePlayer(PieceType.WHITE_PIECE) ,new DamePlayer(PieceType.BLACK_PIECE), new DamePlayer(PieceType.WHITE_QUEEN), new DamePlayer(PieceType.BLACK_QUEEN)};
         this.currentPlayer = this.damePlayers[0];
         this.gameInitBoard();
         this.isGameOver = false;
@@ -67,7 +66,7 @@ public class Dame {
     // method to check if the game is over
     public boolean isGameOver() {
 
-        if (this.currentPlayer.getScore() == 12) {
+        if (this.currentPlayer.getNumberOpponentPieces() == 12) {
             System.out.println("  The Winner is   "+this.currentPlayer.getPlayerPieceType());
            return this.isGameOver = true;
         }
@@ -86,7 +85,7 @@ public class Dame {
         }
     }
     public boolean isQueen(int x, int y) {
-        if ((this.board[x][y].getDamePiece().getPieceType() == PieceType.WHITE_QUEEN  && x == 0 )|| (this.board[x][y].getDamePiece().getPieceType() == PieceType.BLACK_QUEEN && x == 7)) {
+        if ((this.board[x][y].getDamePiece().getPieceType() == PieceType.WHITE_QUEEN  )|| (this.board[x][y].getDamePiece().getPieceType() == PieceType.BLACK_QUEEN && x == 7)) {
             return true;
         }
         return false;
@@ -233,6 +232,7 @@ public class Dame {
             this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom,yFrom, PieceType.EMPTY));
             this.board[xMiddle][yMiddle].setDamePiece(new DamePiece(xMiddle, yMiddle, PieceType.EMPTY));
             this.currentPlayer.setScore(this.currentPlayer.getScore() + 1);
+            this.currentPlayer.setNumberOpponentPieces(this.currentPlayer.getNumberOpponentPieces() + 1);
             System.out.println("You captured a piece");
             setPieceToQueen(xTo, yTo);
         }

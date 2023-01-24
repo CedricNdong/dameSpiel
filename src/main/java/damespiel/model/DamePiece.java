@@ -22,12 +22,6 @@ public class DamePiece {
         this.xPosFrom = xPosTo;
         this.yPosFrom = yPosTo;
     }
-
-    public boolean isValideMove() {
-        movePiece(this.xPosFrom, this.yPosFrom);
-
-        return true;
-    }
     public String toString() {
 
         if (pieceType == PieceType.WHITE_PIECE) {

@@ -15,6 +15,8 @@ public class DameSpielView extends PApplet implements IDameSpielView {
     IDameSpielController dameSpielController;
     PImage WHITE_PIECE,BLACK_PIECE,WHITE_QUEEN,BLACK_QUEEN;
     PImage[][]  gameBoard;
+    private int winnerScore = 25 ;
+    private ScoreTracker scoreTracker;
 
     private boolean onClick = true;
     private boolean move = true;
@@ -29,6 +31,7 @@ public class DameSpielView extends PApplet implements IDameSpielView {
         WHITE_PIECE = loadImage("src/main/java/damespiel/view/images/WhitePiece.png");
         BLACK_QUEEN = loadImage("src/main/java/damespiel/view/images/BlackQueen.png");
         WHITE_QUEEN = loadImage("src/main/java/damespiel/view/images/WhiteQueen.png");
+    this.scoreTracker = new ScoreTracker("src/main/java/damespiel/view/bestScore.txt");
     }
     public void draw() {
         dameSpielController.nextFrame();
@@ -155,6 +158,17 @@ public class DameSpielView extends PApplet implements IDameSpielView {
 
     @Override
     public void drawGameOver() {
+
+        // check if the score is a new highscore
+        if (this.winnerScore > this.scoreTracker.getBestScore()){
+            this.scoreTracker.updateScore(this.winnerScore);
+
+            System.out.println("new highscore: " + this.winnerScore);
+        }else {
+            System.out.println(scoreTracker.getBestScore());
+        }
+
+
         background(0);
         textSize(70);
         text("Game Over !", 350, 300);
@@ -175,19 +189,12 @@ public class DameSpielView extends PApplet implements IDameSpielView {
         fill(0, 255,0, 100);
         rect(yto*100+100,xto*100 +40 , 100, 100);
     }
-
-
     @Override
     public void drawMakeMove(Cell [][] board, int xto, int yto, int whiteScore, int blackScore, DamePlayer currentPlayer) {
-
         if (move){
             drawGame(whiteScore, blackScore, currentPlayer);
             move = false;
-
-
-
         }
-
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[j][i] != null) {
@@ -208,8 +215,6 @@ public class DameSpielView extends PApplet implements IDameSpielView {
                 }
             }
         }
-
-
     }
 
 

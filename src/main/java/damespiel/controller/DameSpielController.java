@@ -1,7 +1,7 @@
 package damespiel.controller;
 
 import damespiel.model.Dame;
-import damespiel.model.PieceType;
+
 import damespiel.view.DameSpielView;
 import lombok.Data;
 
@@ -51,7 +51,8 @@ public class DameSpielController implements IDameSpielController {
     public void userInput() {
         if (gameState == GameState.START_SCREEN) {
             isEvent = true;
-            gameState = GameState.DAME_SCREEN;
+            gameState = GameState.GAME_OVER;
+           // gameState = GameState.DAME_SCREEN;
 
         }
         else if (gameState == GameState.DAME_SCREEN) {

@@ -18,12 +18,7 @@ public class DameSpielView extends PApplet implements IDameSpielView {
 
     private boolean onClick = true;
     private boolean move = true;
-    private boolean turn = true; // true = white_Piece turn, false = black_Piece turn
     private int xPos,yPos, xPosTo, yPosTo; // mouse position
-    private DamePlayer currentPlayer;
-
-
-
     public DameSpielView() {
         setSize( 1000, 1000);
     }
@@ -40,8 +35,6 @@ public class DameSpielView extends PApplet implements IDameSpielView {
     }
 
     private void onStartBoard(int whiteScore, int blackScore) {
-        int hell = 0 , dunkel = 0;
-
         background(0);
         //intitial position of the pieces
         gameBoard = new PImage[8][8];
@@ -76,14 +69,20 @@ public class DameSpielView extends PApplet implements IDameSpielView {
                 }
             }
         }
-// Display Features wie Score
+        // Display Features wie Score
         fill(255,206,158);
         rect(65,860,875,120);
 
         fill(0,0,0);
         textSize(50);
-        text("Score: Player 1 : "+whiteScore +"Player 2"+blackScore, 100, 920);
+        text("SCORE:", 100, 935);
+        text(" Player 1:   "+whiteScore, 280, 910);
+        text(" Player 2:   "+blackScore, 280, 960);
+        text("TURN:", 665, 935);
 
+        // start player ist white
+            fill(255,255,255);
+            ellipse(840, 920, 75, 75);
     }
     public void keyPressed() {
         if (key == 's') {
@@ -99,58 +98,52 @@ public class DameSpielView extends PApplet implements IDameSpielView {
     }
     public void mousePressed() {
         move = true;
+       if (mouseX > 100 && mouseX < 900 && mouseY > 40 && mouseY < 840) {
+           if (onClick) {
+
+               this.xPos = round( mouseY / 100  ) -1;
+
+               this.yPos = round( mouseX / 100 )  -1;
+
+               dameSpielController.mousePosFrom(this.xPos,this.yPos);
+               fill(255, 0, 0, 100);
+               rect(this.yPos*100+100,this.xPos*100 +40 , 100, 100);
+               System.out.println("xPos: " + this.xPos + " yPos: " + this.yPos);
+               onClick = false;
 
 
-
-
-
-           if (mouseX > 100 && mouseX < 900 && mouseY > 40 && mouseY < 840) {
-               if (onClick) {
-
-                   this.xPos = round( mouseY / 100  ) -1;
-
-                   this.yPos = round( mouseX / 100 )  -1;
-
-                   dameSpielController.mousePosFrom(this.xPos,this.yPos);
-                   fill(255, 0, 0, 100);
-                   rect(this.yPos*100+100,this.xPos*100 +40 , 100, 100);
-                   System.out.println("xPos: " + this.xPos + " yPos: " + this.yPos);
-                   onClick = false;
-
-
-               }
-               else {
-                   System.out.println(" the second click should be here and the move should be done");
-                    this.xPosTo = round( mouseY / 100  ) -1;
-                    this.yPosTo = round( mouseX / 100 )  -1;
-                    dameSpielController.mousePosTo(this.xPos,this.yPos,this.xPosTo,this.yPosTo);
-
-                   onClick = true;
-               }
            }
+           else {
+               System.out.println(" the second click should be here and the move should be done");
+                this.xPosTo = round( mouseY / 100  ) -1;
+                this.yPosTo = round( mouseX / 100 )  -1;
+                dameSpielController.mousePosTo(this.xPos,this.yPos,this.xPosTo,this.yPosTo);
+               onClick = true;
+
+           }
+       }
     }
 
 
 
     @Override
-    public void drawGame(int whiteScore, int blackScore) {
+    public void drawGame(int whiteScore, int blackScore, DamePlayer currentPlayer) {
          onStartBoard(whiteScore, blackScore);
-
-
-
-
-
-
-
+         // turn the current player
+        if ( currentPlayer.getPlayerPieceType() == PieceType.WHITE_PIECE || currentPlayer.getPlayerPieceType() == PieceType.WHITE_QUEEN){
+            fill(255,255,255);
+            ellipse(840, 920, 75, 75);
+        }else {
+            fill(0,0,0);
+            ellipse(840, 920, 75, 75);
+        }
 
 
     }
 
 
 
-    /**
-     *
-     */
+
     @Override
     public void drawTitleScreen() {
         background(255);
@@ -159,9 +152,7 @@ public class DameSpielView extends PApplet implements IDameSpielView {
 
     }
 
-    /**
-     *
-     */
+
     @Override
     public void drawGameOver() {
         background(0);
@@ -175,10 +166,7 @@ public class DameSpielView extends PApplet implements IDameSpielView {
 
     }
 
-    /**
-     * @param xto
-     * @param yto
-     */
+
     @Override
     public void drawCanMoveTo(int xto, int yto) {
         if (move){
@@ -186,25 +174,23 @@ public class DameSpielView extends PApplet implements IDameSpielView {
         }
         fill(0, 255,0, 100);
         rect(yto*100+100,xto*100 +40 , 100, 100);
-        System.out.println("xPossss: " + xto + " yPos: " + yto);
     }
 
-    /**
-     * @param xto
-     * @param yto
-     */
+
     @Override
-    public void drawMakeMove(Cell [][] board,int xto, int yto,int whiteScore, int blackScore) {
-        System.out.println("drawMakeMove,,,");
+    public void drawMakeMove(Cell [][] board, int xto, int yto, int whiteScore, int blackScore, DamePlayer currentPlayer) {
+
         if (move){
-            drawGame(whiteScore, blackScore);
+            drawGame(whiteScore, blackScore, currentPlayer);
             move = false;
+
+
+
         }
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[j][i] != null) {
-
                     if (board[j][i].getDamePiece().getPieceType() == PieceType.EMPTY){
                         int color = ((i + j) % 2 == 0) ? 255 : 209;
                         fill(color, (i + j) % 2 == 0 ? 206 : 139, ( i + j) % 2 == 0 ? 158 : 71);
@@ -213,6 +199,7 @@ public class DameSpielView extends PApplet implements IDameSpielView {
                         image(WHITE_PIECE, i * 100 + 105, j * 100 +45);
                     } else if (board[j][i].getDamePiece().getPieceType() == PieceType.BLACK_PIECE){
                         image(BLACK_PIECE, i * 100 + 105, j * 100 +45);
+
                     } else if (board[j][i].getDamePiece().getPieceType() == PieceType.WHITE_QUEEN){
                         image(WHITE_QUEEN, i * 100 + 105, j * 100 +45);
                     } else if (board[j][i].getDamePiece().getPieceType() == PieceType.BLACK_QUEEN){
@@ -221,10 +208,6 @@ public class DameSpielView extends PApplet implements IDameSpielView {
                 }
             }
         }
-
-
-
-
 
 
     }

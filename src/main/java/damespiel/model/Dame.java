@@ -3,9 +3,8 @@ package damespiel.model;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Stack;
+
 
 @Data
 public class Dame {
@@ -67,6 +66,7 @@ public class Dame {
     }
     // method to check if the game is over
     public boolean isGameOver() {
+
         if (this.currentPlayer.getScore() == 12) {
             System.out.println("  The Winner is   "+this.currentPlayer.getPlayerPieceType());
            return this.isGameOver = true;
@@ -76,26 +76,6 @@ public class Dame {
 
     // method of possible moves
     // player turn method to  give the player who is playing and disable the other player
-
-    public boolean playerTurn(int xFrom, int yFrom) {
-        if (this.board[xFrom][yFrom].getDamePiece().getPieceType() == PieceType.WHITE_PIECE && this.currentPlayer == this.damePlayers[0]) {
-            System.out.println(this.currentPlayer.getPlayerPieceType()+"  is playing...");
-            return true;
-        }else if (this.board[xFrom][yFrom].getDamePiece().getPieceType() == PieceType.BLACK_PIECE && this.currentPlayer == this.damePlayers[1]) {
-            System.out.println(this.currentPlayer.getPlayerPieceType()+"  is playing...");
-            return true;
-        } else if (this.board[xFrom][yFrom].getDamePiece().getPieceType() == PieceType.EMPTY && this.currentPlayer == this.damePlayers[1]) {
-            System.out.println(this.currentPlayer.getPlayerPieceType()+"  can not move from an empty cell");
-            return false;
-        } else if (this.board[xFrom][yFrom].getDamePiece().getPieceType() == PieceType.EMPTY && this.currentPlayer == this.damePlayers[0]) {
-            System.out.println(this.currentPlayer.getPlayerPieceType()+"  can not move from an empty cell");
-            return false;
-        }
-        else {
-            System.out.println("It's not your turn. "+this.currentPlayer.getPlayerPieceType()+" should first pay");
-            return false;
-        }
-    }
 
 
     public void setPieceToQueen(int x, int y) {
@@ -224,18 +204,18 @@ public class Dame {
 
     // method to move a piece
     public void makeMove(int xFrom, int yFrom, int xTo, int yTo) {
-
+        // check invalid move
+        if (!isValidMove(xFrom, yFrom, xTo, yTo)) {
+            printBoard();
+            return;
+        }
         // check if the selected piece is for the current player
         if (this.board[xFrom][yFrom].getDamePiece().getPieceType() != this.currentPlayer.getPlayerPieceType()) {
             System.out.println("It's not your turn. " + this.currentPlayer.getPlayerPieceType() + " should first play");
             return;
         }
 
-        // check invalid move
-        if (!isValidMove(xFrom, yFrom, xTo, yTo)) {
-            printBoard();
-            return;
-        }
+
         // check if the piece is a queen
         if (this.isQueen(xFrom, yFrom)) {
             if (!this.isQueenMove(xFrom, yFrom, xTo, yTo)) {

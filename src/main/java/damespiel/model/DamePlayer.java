@@ -13,10 +13,4 @@ public class DamePlayer {
         this.score = 0;
         this.playerPieceType = playerPieceType;
     }
-
-    public void addScore() {
-        this.score++;
-    }
-
-
 }

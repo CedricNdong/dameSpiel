@@ -17,7 +17,7 @@ public class Dame {
 
     public Dame() {
         this.board = new Cell[BOARD_ROWS][BOARD_COLUMNS];
-        this.damePlayers = new DamePlayer[]{new DamePlayer(PieceType.WHITE_PIECE) ,new DamePlayer(PieceType.BLACK_PIECE), new DamePlayer(PieceType.WHITE_QUEEN), new DamePlayer(PieceType.BLACK_QUEEN)};
+        this.damePlayers = new DamePlayer[]{new DamePlayer(PieceType.WHITE_PIECE, PieceType.WHITE_QUEEN), new DamePlayer(PieceType.BLACK_PIECE, PieceType.BLACK_QUEEN)};
         this.currentPlayer = this.damePlayers[0];
         this.gameInitBoard();
         this.isGameOver = false;
@@ -85,7 +85,7 @@ public class Dame {
         }
     }
     public boolean isQueen(int x, int y) {
-        if ((this.board[x][y].getDamePiece().getPieceType() == PieceType.WHITE_QUEEN  )|| (this.board[x][y].getDamePiece().getPieceType() == PieceType.BLACK_QUEEN && x == 7)) {
+        if ((this.board[x][y].getDamePiece().getPieceType() == PieceType.WHITE_QUEEN) || (this.board[x][y].getDamePiece().getPieceType() == PieceType.BLACK_QUEEN)) {
             return true;
         }
         return false;
@@ -97,13 +97,9 @@ public class Dame {
     }
 
 
-    // method to check if the move is valid and return all case of invalid move
+    // method to check if the move is valid and return all case of invalid move of a normal piece
     public boolean isValidMove(int xFrom, int yFrom, int xTo, int yTo) {
-        // check if the xFrom and yFrom coordinates are not out of the board
-        if (xFrom < 0 || xFrom >= this.BOARD_ROWS || yFrom < 0 || yFrom >= this.BOARD_COLUMNS) {
-            System.out.println("You can not move out of the board / give [0-7] coordinates");
-            return false;
-        }
+
         // check if the selected piece is not empty
         if (this.board[xFrom][yFrom].getDamePiece().getPieceType() == PieceType.EMPTY) {
             System.out.println("You can not move from an empty cell");
@@ -149,6 +145,52 @@ public class Dame {
 
         return true;
     }
+/*
+    // method to check if the move is valid and return all case of invalid move of a queen
+    public boolean isValidMoveQueen(int xFrom, int yFrom, int xTo, int yTo) {
+
+        // check if the xTo and yTo coordinates are not out of the board
+        if (xTo < 0 || xTo >= this.BOARD_ROWS || yTo < 0 || yTo >= this.BOARD_COLUMNS) {
+            System.out.println("You can not move out of the board ...");
+            return false;
+        }
+        // check if the selected piece is for the current player
+        if (this.board[xFrom][yFrom].getDamePiece().getPieceType() != this.currentPlayer.getPlayerPieceType()) {
+            System.out.println(this.currentPlayer.getPlayerPieceType()+":  it is not your piece");
+            return false;
+        }
+        // check if the move diagonal
+        if (Math.abs(xTo - xFrom) != Math.abs(yTo - yFrom)) {
+            System.out.println("You can only move diagonally");
+            return false;
+        }
+
+        // check if the move to the same pieceType or  opposite pieceType
+        if ((this.board[xTo][yTo].getDamePiece().getPieceType() == (this.currentPlayer.getPlayerPieceType()))
+                || (this.board[xTo][yTo].getDamePiece().getPieceType() != PieceType.EMPTY)) {
+            System.out.println("You can not move to a cell with the same piece type or on opposite piece type");
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // method to the possible moves for a piece
     public List<int[]> possibleMoves(int xFrom, int yFrom) {
@@ -182,7 +224,7 @@ public class Dame {
     }
 
 
-    // create a method isQueenMove to check if the move is a queen move
+  /*  // create a method isQueenMove to check if the move is a queen move
     public boolean isQueenMove(int xFrom, int yFrom, int xTo, int yTo) {
         if (Math.abs(xFrom - xTo) == Math.abs(yFrom - yTo)) {
             int xDirection = Integer.compare(xTo, xFrom);
@@ -201,8 +243,40 @@ public class Dame {
         return false;
     }
 
+
+   */
+
+    public boolean isQueenMove(int xFrom, int yFrom, int xTo, int yTo) {
+        if (Math.abs(xFrom - xTo) == Math.abs(yFrom - yTo)) {
+            int xDirection = Integer.compare(xTo, xFrom);
+            int yDirection = Integer.compare(yTo, yFrom);
+            int x = xFrom + xDirection;
+            int y = yFrom + yDirection;
+            while (x != xTo) {
+                if (this.board[x][y].getDamePiece().getPieceType() != PieceType.EMPTY) {
+                    return false;
+                }
+                x += xDirection;
+                y += yDirection;
+            }
+            // Check if destination cell contains an opponent's piece
+            if (this.board[xTo][yTo].getDamePiece().getPieceType() != PieceType.EMPTY &&
+                    this.board[xFrom][yFrom].getDamePiece().getPieceType() != this.board[xTo][yTo].getDamePiece().getPieceType()) {
+                // Remove opponent's piece from the board
+
+            }
+            return true;
+        }
+        return false;
+    }
+
     // method to move a piece
     public void makeMove(int xFrom, int yFrom, int xTo, int yTo) {
+        // check if the xFrom and yFrom coordinates are not out of the board
+        if (xFrom < 0 || xFrom >= this.BOARD_ROWS || yFrom < 0 || yFrom >= this.BOARD_COLUMNS) {
+            System.out.println("You can not move out of the board / give [0-7] coordinates");
+            return;
+        }
         // check invalid move
         if (!isValidMove(xFrom, yFrom, xTo, yTo)) {
             printBoard();
@@ -217,7 +291,15 @@ public class Dame {
 
         // check if the piece is a queen
         if (this.isQueen(xFrom, yFrom)) {
-            if (!this.isQueenMove(xFrom, yFrom, xTo, yTo)) {
+            // check if the move is a valid queen
+            if (isQueenMove(xFrom, yFrom, xTo, yTo)) {
+
+
+                    this.board[xTo][yTo].setDamePiece(new DamePiece(xFrom, yFrom, this.board[xFrom][yFrom].getDamePiece().getPieceType()));
+                    this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
+                    printBoard();
+
+            } else{
                 System.out.println("You can not move a queen like that");
                 printBoard();
 

@@ -7,13 +7,16 @@ import lombok.Data;
 
 public class DamePlayer {
     private int score;
-    private PieceType playerPieceType;
+    private PieceType playerPieceType1;
+    private PieceType playerPieceType2;
+
     // number of opponent pieces
     private int numberOpponentPieces;
 
-    public DamePlayer(PieceType playerPieceType) {
+    public DamePlayer(PieceType playerPieceType1, PieceType playerPieceType2) {
         this.score = 0;
-        this.playerPieceType = playerPieceType;
+        this.playerPieceType1 = playerPieceType1;
+        this.playerPieceType2 = playerPieceType2;
         this.numberOpponentPieces = 0;
     }
 }

@@ -34,8 +34,8 @@ public class DameSpielController implements IDameSpielController {
                     isEvent= false;
                 }
                 case DAME_SCREEN -> {
-                    int whiteScore = dame.getDamePlayers()[0].getScore();
-                    int blackScore = dame.getDamePlayers()[1].getScore();
+                    int whiteScore = dame.getPlayer1().getScore();
+                    int blackScore = dame.getPlayer2().getScore();
                     dameView.drawGame(whiteScore, blackScore,dame.getCurrentPlayer());
                     isEvent = false;
                 }
@@ -78,7 +78,7 @@ public class DameSpielController implements IDameSpielController {
 
             } else {
                 System.out.println("value is null");
-                dameView.drawGame(dame.getDamePlayers()[0].getScore(), dame.getDamePlayers()[1].getScore(),dame.getCurrentPlayer());
+                dameView.drawGame(dame.getPlayer1().getScore(), dame.getPlayer2().getScore(),dame.getCurrentPlayer());
             }
 
     }
@@ -91,11 +91,11 @@ public class DameSpielController implements IDameSpielController {
 
 
             dame.makeMove(xPos, yPos, xPosTo, yPosTo);
-            dameView.drawMakeMove(dame.getBoard(),xPosTo, yPosTo,dame.getDamePlayers()[0].getScore(), dame.getDamePlayers()[1].getScore(),dame.getCurrentPlayer());
+            dameView.drawMakeMove(dame.getBoard(),xPosTo, yPosTo,dame.getPlayer1().getScore(), dame.getPlayer2().getScore(),dame.getCurrentPlayer());
 
         } else {
             System.out.println("select a possible move position");
-            dameView.drawGame(dame.getDamePlayers()[0].getScore(), dame.getDamePlayers()[1].getScore(),dame.getCurrentPlayer());
+            dameView.drawGame(dame.getPlayer1().getScore(), dame.getPlayer2().getScore(),dame.getCurrentPlayer());
         }
 
     }

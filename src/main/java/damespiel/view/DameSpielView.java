@@ -133,7 +133,7 @@ public class DameSpielView extends PApplet implements IDameSpielView {
     public void drawGame(int whiteScore, int blackScore, DamePlayer currentPlayer) {
          onStartBoard(whiteScore, blackScore);
          // turn the current player
-        if ( currentPlayer.getPlayerPieceType() == PieceType.WHITE_PIECE || currentPlayer.getPlayerPieceType() == PieceType.WHITE_QUEEN){
+        if ( currentPlayer.getPlayerPieceType1() == PieceType.WHITE_PIECE || currentPlayer.getPlayerPieceType2() == PieceType.WHITE_QUEEN){
             fill(255,255,255);
             ellipse(840, 920, 75, 75);
         }else {

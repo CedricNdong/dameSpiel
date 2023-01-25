@@ -10,15 +10,17 @@ import java.util.List;
 public class Dame {
     private final int BOARD_COLUMNS=8,BOARD_ROWS = 8;
     private Cell[][] board;
-    private DamePlayer[] damePlayers;
+    private DamePlayer player1;
+    private DamePlayer player2;
     private DamePlayer currentPlayer;
     private Cell cell;
     private boolean isGameOver;
 
     public Dame() {
         this.board = new Cell[BOARD_ROWS][BOARD_COLUMNS];
-        this.damePlayers = new DamePlayer[]{new DamePlayer(PieceType.WHITE_PIECE, PieceType.WHITE_QUEEN), new DamePlayer(PieceType.BLACK_PIECE, PieceType.BLACK_QUEEN)};
-        this.currentPlayer = this.damePlayers[0];
+        this.player1 = new DamePlayer(PieceType.WHITE_PIECE, PieceType.WHITE_QUEEN);
+        this.player2 = new DamePlayer(PieceType.BLACK_PIECE, PieceType.BLACK_QUEEN);
+        this.currentPlayer = this.player1;
         this.gameInitBoard();
         this.isGameOver = false;
     }
@@ -66,8 +68,8 @@ public class Dame {
     // method to check if the game is over
     public boolean isGameOver() {
 
-        if (this.currentPlayer.getNumberOpponentPieces() == 12) {
-            System.out.println("  The Winner is   "+this.currentPlayer.getPlayerPieceType());
+        if (this.currentPlayer.getNumberOpponentPieces() == 2) {
+            System.out.println("  The Winner is   "+this.currentPlayer);
            return this.isGameOver = true;
         }
         return this.isGameOver;
@@ -93,7 +95,7 @@ public class Dame {
 
     // change the current player
     public void changePlayer() {
-        this.currentPlayer = (this.currentPlayer == this.damePlayers[0]) ? this.damePlayers[1] : this.damePlayers[0];
+        this.currentPlayer = (this.currentPlayer == this.player1) ? this.player2 : this.player1;
     }
 
 
@@ -113,8 +115,9 @@ public class Dame {
         }
 
         // check if the selected piece is for the current player
-        if (this.board[xFrom][yFrom].getDamePiece().getPieceType() != this.currentPlayer.getPlayerPieceType()) {
-            System.out.println(this.currentPlayer.getPlayerPieceType()+":  it is not your piece");
+        if (this.board[xFrom][yFrom].getDamePiece().getPieceType() != (this.currentPlayer.getPlayerPieceType1())
+                && this.board[xFrom][yFrom].getDamePiece().getPieceType() != (this.currentPlayer.getPlayerPieceType2())) {
+            System.out.println(this.currentPlayer+":  You can not move a piece that is not yours, please select a piece of your color");
             return false;
         }
         // check if the move diagonal
@@ -124,7 +127,7 @@ public class Dame {
         }
 
         // check if the move to the same pieceType or  opposite pieceType
-        if ((this.board[xTo][yTo].getDamePiece().getPieceType() == (this.currentPlayer.getPlayerPieceType()))
+        if ((this.board[xTo][yTo].getDamePiece().getPieceType() == this.currentPlayer.getPlayerPieceType1()) || (this.board[xTo][yTo].getDamePiece().getPieceType() == this.currentPlayer.getPlayerPieceType2())
                 || (this.board[xTo][yTo].getDamePiece().getPieceType() != PieceType.EMPTY)) {
             System.out.println("You can not move to a cell with the same piece type or on opposite piece type");
             return false;
@@ -137,7 +140,8 @@ public class Dame {
             if (this.board[xMiddle][yMiddle].getDamePiece().getPieceType() == PieceType.EMPTY) {
                 System.out.println("You can only capture a piece");
                 return false;
-            }else if (this.board[xMiddle][yMiddle].getDamePiece().getPieceType() == this.currentPlayer.getPlayerPieceType()) {
+            }else if ((this.board[xMiddle][yMiddle].getDamePiece().getPieceType() == this.currentPlayer.getPlayerPieceType1())
+                    || (this.board[xMiddle][yMiddle].getDamePiece().getPieceType() == this.currentPlayer.getPlayerPieceType2())) {
                 System.out.println("You can only capture a piece");
                 return false;
             }
@@ -145,52 +149,6 @@ public class Dame {
 
         return true;
     }
-/*
-    // method to check if the move is valid and return all case of invalid move of a queen
-    public boolean isValidMoveQueen(int xFrom, int yFrom, int xTo, int yTo) {
-
-        // check if the xTo and yTo coordinates are not out of the board
-        if (xTo < 0 || xTo >= this.BOARD_ROWS || yTo < 0 || yTo >= this.BOARD_COLUMNS) {
-            System.out.println("You can not move out of the board ...");
-            return false;
-        }
-        // check if the selected piece is for the current player
-        if (this.board[xFrom][yFrom].getDamePiece().getPieceType() != this.currentPlayer.getPlayerPieceType()) {
-            System.out.println(this.currentPlayer.getPlayerPieceType()+":  it is not your piece");
-            return false;
-        }
-        // check if the move diagonal
-        if (Math.abs(xTo - xFrom) != Math.abs(yTo - yFrom)) {
-            System.out.println("You can only move diagonally");
-            return false;
-        }
-
-        // check if the move to the same pieceType or  opposite pieceType
-        if ((this.board[xTo][yTo].getDamePiece().getPieceType() == (this.currentPlayer.getPlayerPieceType()))
-                || (this.board[xTo][yTo].getDamePiece().getPieceType() != PieceType.EMPTY)) {
-            System.out.println("You can not move to a cell with the same piece type or on opposite piece type");
-            return false;
-        }
-
-        return true;
-    }
-
-
-
- */
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // method to the possible moves for a piece
     public List<int[]> possibleMoves(int xFrom, int yFrom) {
@@ -210,12 +168,11 @@ public class Dame {
                 }
             }
         } else {
-            int moveDirection = this.currentPlayer.getPlayerPieceType() == PieceType.WHITE_PIECE ? -1 : 1;
+            int moveDirection = ((this.currentPlayer.getPlayerPieceType1() == PieceType.WHITE_PIECE) || this.currentPlayer.getPlayerPieceType2() == PieceType.WHITE_QUEEN) ? -1 : 1;
             for (int i = -1; i <= 1; i += 2) {
                 int xTo = xFrom + moveDirection;
                 int yTo = yFrom + i;
                 if (isValidMove(xFrom, yFrom, xTo, yTo)) {
-                    System.out.println("the possible moves from the method possibleMoves are: " + xTo + " " + yTo);
                     listOfMoves.add(new int[]{xTo, yTo});
                 }
             }
@@ -223,47 +180,40 @@ public class Dame {
         return listOfMoves;
     }
 
-
-  /*  // create a method isQueenMove to check if the move is a queen move
     public boolean isQueenMove(int xFrom, int yFrom, int xTo, int yTo) {
         if (Math.abs(xFrom - xTo) == Math.abs(yFrom - yTo)) {
+
             int xDirection = Integer.compare(xTo, xFrom);
             int yDirection = Integer.compare(yTo, yFrom);
             int x = xFrom + xDirection;
             int y = yFrom + yDirection;
+            int xMiddle = x;
+            int yMiddle = y;
             while (x != xTo) {
-                if (this.board[x][y].getDamePiece().getPieceType() != PieceType.EMPTY) {
+                if ((this.board[x][y].getDamePiece().getPieceType() != PieceType.EMPTY && this.board[x][y].getDamePiece().getPieceType() == this.currentPlayer.getPlayerPieceType2())
+                        || (this.board[x][y].getDamePiece().getPieceType() != PieceType.EMPTY && this.board[x][y].getDamePiece().getPieceType() == this.currentPlayer.getPlayerPieceType1())){
+
                     return false;
+                } else if ((this.board[x][y].getDamePiece().getPieceType() != PieceType.EMPTY && this.board[x][y].getDamePiece().getPieceType() != this.currentPlayer.getPlayerPieceType2())
+                        || (this.board[x][y].getDamePiece().getPieceType() != PieceType.EMPTY && this.board[x][y].getDamePiece().getPieceType() != this.currentPlayer.getPlayerPieceType1())){
+                     xMiddle = x ;
+                     yMiddle = y ;
                 }
                 x += xDirection;
                 y += yDirection;
             }
-            return true;
-        }
-        return false;
-    }
-
-
-   */
-
-    public boolean isQueenMove(int xFrom, int yFrom, int xTo, int yTo) {
-        if (Math.abs(xFrom - xTo) == Math.abs(yFrom - yTo)) {
-            int xDirection = Integer.compare(xTo, xFrom);
-            int yDirection = Integer.compare(yTo, yFrom);
-            int x = xFrom + xDirection;
-            int y = yFrom + yDirection;
-            while (x != xTo) {
-                if (this.board[x][y].getDamePiece().getPieceType() != PieceType.EMPTY) {
-                    return false;
-                }
-                x += xDirection;
-                y += yDirection;
+            if ((this.board[x][y].getDamePiece().getPieceType() != PieceType.EMPTY && this.board[xFrom][yFrom].getDamePiece().getPieceType() == this.board[x][y].getDamePiece().getPieceType())
+                    || (this.board[x][y].getDamePiece().getPieceType() != PieceType.EMPTY && this.board[x][y].getDamePiece().getPieceType() == this.currentPlayer.getPlayerPieceType1())
+                    || (this.board[x][y].getDamePiece().getPieceType() != PieceType.EMPTY && this.board[x][y].getDamePiece().getPieceType() != this.currentPlayer.getPlayerPieceType1())) {
+                return false;
             }
-            // Check if destination cell contains an opponent's piece
-            if (this.board[xTo][yTo].getDamePiece().getPieceType() != PieceType.EMPTY &&
-                    this.board[xFrom][yFrom].getDamePiece().getPieceType() != this.board[xTo][yTo].getDamePiece().getPieceType()) {
-                // Remove opponent's piece from the board
+            this.board[xMiddle][yMiddle].setDamePiece(new DamePiece(xMiddle,yMiddle,PieceType.EMPTY));
+            this.currentPlayer.setScore(this.currentPlayer.getScore() + 2);
+            this.currentPlayer.setNumberOpponentPieces(this.currentPlayer.getNumberOpponentPieces() + 1);
+            if (this.board[xTo][yTo].getDamePiece().getPieceType() != PieceType.EMPTY
+                    && this.board[xFrom][yFrom].getDamePiece().getPieceType() == this.board[xTo][yTo].getDamePiece().getPieceType()) {
 
+            return false;
             }
             return true;
         }
@@ -272,38 +222,38 @@ public class Dame {
 
     // method to move a piece
     public void makeMove(int xFrom, int yFrom, int xTo, int yTo) {
+
         // check if the xFrom and yFrom coordinates are not out of the board
         if (xFrom < 0 || xFrom >= this.BOARD_ROWS || yFrom < 0 || yFrom >= this.BOARD_COLUMNS) {
             System.out.println("You can not move out of the board / give [0-7] coordinates");
+            return;
+        }
+        // check if the selected piece is for the current player
+        if (this.board[xFrom][yFrom].getDamePiece().getPieceType() != (this.currentPlayer.getPlayerPieceType1())
+                && this.board[xFrom][yFrom].getDamePiece().getPieceType() != (this.currentPlayer.getPlayerPieceType2())) {
+            System.out.println("It's not your turn. " + this.currentPlayer + " should first play");
+            return;
+        }
+        // check if the piece is a queen
+        if (this.isQueen(xFrom, yFrom)) {
+            // check if the move is a valid queen
+            if (isQueenMove(xFrom, yFrom, xTo, yTo)) {
+                this.board[xTo][yTo].setDamePiece(new DamePiece(xFrom, yFrom, this.board[xFrom][yFrom].getDamePiece().getPieceType()));
+                this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
+                changePlayer();
+                printBoard();
+
+
+            } else{
+                System.out.println("You can not move a queen like that");
+                printBoard();
+            }
             return;
         }
         // check invalid move
         if (!isValidMove(xFrom, yFrom, xTo, yTo)) {
             printBoard();
             return;
-        }
-        // check if the selected piece is for the current player
-        if (this.board[xFrom][yFrom].getDamePiece().getPieceType() != this.currentPlayer.getPlayerPieceType()) {
-            System.out.println("It's not your turn. " + this.currentPlayer.getPlayerPieceType() + " should first play");
-            return;
-        }
-
-
-        // check if the piece is a queen
-        if (this.isQueen(xFrom, yFrom)) {
-            // check if the move is a valid queen
-            if (isQueenMove(xFrom, yFrom, xTo, yTo)) {
-
-
-                    this.board[xTo][yTo].setDamePiece(new DamePiece(xFrom, yFrom, this.board[xFrom][yFrom].getDamePiece().getPieceType()));
-                    this.board[xFrom][yFrom].setDamePiece(new DamePiece(xFrom, yFrom, PieceType.EMPTY));
-                    printBoard();
-
-            } else{
-                System.out.println("You can not move a queen like that");
-                printBoard();
-
-            }
         }
 
         // check if the move is a capturing move
@@ -315,13 +265,10 @@ public class Dame {
             this.board[xMiddle][yMiddle].setDamePiece(new DamePiece(xMiddle, yMiddle, PieceType.EMPTY));
             this.currentPlayer.setScore(this.currentPlayer.getScore() + 1);
             this.currentPlayer.setNumberOpponentPieces(this.currentPlayer.getNumberOpponentPieces() + 1);
-            System.out.println("You captured a piece");
             setPieceToQueen(xTo, yTo);
         }
-
-
         if (Math.abs(xFrom - xTo) == 1) {
-            if (this.currentPlayer.getPlayerPieceType() == PieceType.WHITE_PIECE) {
+            if ((this.currentPlayer.getPlayerPieceType1() == PieceType.WHITE_PIECE) || (this.currentPlayer.getPlayerPieceType2() == PieceType.WHITE_QUEEN)) {
                 if (xTo > xFrom) {
                     System.out.println("You can only move forward");
                     printBoard();
@@ -340,14 +287,8 @@ public class Dame {
 
             setPieceToQueen(xTo, yTo);
         }
-        // check for promotion
-
-
-
-
-
+        isGameOver();
         changePlayer();
-
         printBoard();
     }
 

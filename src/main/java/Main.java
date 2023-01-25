@@ -17,7 +17,7 @@ public class Main {
         System.out.println("\n");
 
         while(true) {
-            System.out.println("##>>>  "+dame.getCurrentPlayer().getPlayerPieceType()+ " is playing");
+            System.out.println("##>>>  "+dame.getCurrentPlayer()+ " is playing");
             System.out.println("\nx please");
             x  = scanner.nextInt();
             System.out.println("y please");
